@@ -10,23 +10,23 @@
 			<div class="col-xs-6 col-sm-12">
 				<div class="panel panel-default">
 					<div class="panel-body" id="options-panel">
-						<div>
+						<div id="hotel-add">
 							<h4>Hotels</h4>
 							<select data-type="hotel" id="hotel-choices">
 	            </select>
 							<button data-action="add" class="btn btn-primary btn-circle pull-right">+</button>
 						</div>
-						<div>
+						<div id="restaurant-add">
 							<h4>Restaurants</h4>
 							<select data-type="restaurant" id="restaurant-choices">
 	            </select>
-							<button data-action="add" class="btn btn-primary btn-circle pull-right">+</button>
+							<button data-action="add" id="restaurant-add" class="btn btn-primary btn-circle pull-right">+</button>
 						</div>
-						<div>
+						<div id="activity-add">
 							<h4>Activities</h4>
 							<select data-type="activity" id="activity-choices">
 	            </select>
-							<button data-action="add" class="btn btn-primary btn-circle pull-right">+</button>
+							<button data-action="add" id="activity-add" class="btn btn-primary btn-circle pull-right">+</button>
 						</div>
 					</div>
 				</div>
@@ -50,29 +50,17 @@
 					<div class="panel-body" id="itinerary">
 						<div>
 							<h4>My Hotel</h4>
-							<ul class="list-group">
-								<div class="itinerary-item">
-									<span class="title"></span>
-									<button class="btn btn-xs btn-danger remove btn-circle">x</button>
-								</div>
+							<ul class="list-group" id="hotel-list">
 							</ul>
 						</div>
 						<div>
 							<h4>My Restaurants</h4>
-							<ul class="list-group">
-								<div class="itinerary-item">
-									<span class="title"></span>
-									<button class="btn btn-xs btn-danger remove btn-circle">x</button>
-								</div>
+							<ul class="list-group" id="restaurant-list">
 							</ul>
 						</div>
 						<div>
 							<h4>My Activities</h4>
-							<ul class="list-group">
-								<div class="itinerary-item">
-									<span class="title"></span>
-									<button class="btn btn-xs btn-danger remove btn-circle">x</button>
-								</div>
+							<ul class="list-group" id="activity-list">
 							</ul>
 						</div>
 					</div>
@@ -88,18 +76,67 @@
 	var hotels = {{ hotels | dump | safe }};
 	var restaurants = {{ restaurants | dump | safe }};
 	var activities = {{ activities | dump | safe }};
+
 </script>
 
 <script>
-	hotels.forEach((hotel)=>{
+	// console.log("************************* ");
+	// console.log(hotels);
+	// console.log("************************* ");
+
+	//fill options
+	hotels.forEach((hotel) => {
 		$(`<option value=${hotel.name}> ${hotel.name} </option>`).appendTo('#hotel-choices');
 	})
-	restaurants.forEach((restaurant)=>{
+	restaurants.forEach((restaurant) => {
 		$(`<option value=${restaurant.name}> ${restaurant.name} </option>`).appendTo('#restaurant-choices');
 	})
-	activities.forEach((activity)=>{
+	activities.forEach((activity) => {
 		$(`<option value=${activity.name}> ${activity.name} </option>`).appendTo('#activity-choices');
 	})
+
+	// attach listeners to add buttons
+	$('#hotel-add').on('click', 'button', function () {
+		let hotelName = $(this).parent().find(':selected').html();
+		$(`<div class="itinerary-item">
+			<span class="title">${hotelName}</span>
+			<button class="btn btn-xs btn-danger remove btn-circle">x</button>
+			</div>`)
+			.appendTo('#hotel-list');
+	})
+
+	$('#restaurant-add').on('click', 'button', function () {
+		let hotelName = $(this).parent().find(':selected').html();
+		$(`<div class="itinerary-item">
+			<span class="title">${hotelName}</span>
+			<button class="btn btn-xs btn-danger remove btn-circle">x</button>
+			</div>`)
+			.appendTo('#restaurant-list');
+	})
+
+	$('#activity-add').on('click', 'button', function () {
+		let hotelName = $(this).parent().find(':selected').html();
+		$(`<div class="itinerary-item">
+			<span class="title">${hotelName}</span>
+			<button class="btn btn-xs btn-danger remove btn-circle">x</button>
+			</div>`)
+			.appendTo('#activity-list');
+	})
+
+	// let addButtons = function (addType) {
+	// 	$(addType).on('click', 'button', function () {
+	// 	let hotelName = $(this).parent().find(':selected').html();
+	// 	$(`<div class="itinerary-item">
+	// 		<span class="title">${hotelName}</span>
+	// 		<button class="btn btn-xs btn-danger remove btn-circle">x</button>
+	// 		</div>`)
+	// 		.appendTo('#hotel-list');
+	// })	
+	// addButtons('#hotel-add');
+	// addButtons('#restaurant-add');
+	// addButtons('#activity-add');
+// }
+
 </script>
 
 {% endblock %}
