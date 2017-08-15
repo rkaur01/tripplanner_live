@@ -1,6 +1,6 @@
 const db = require('./_db')
 const Sequelize = require('sequelize')
-
+const Place = require('./place')
 const Hotel = db.define('hotel', {
 	name: {
 		type: Sequelize.STRING
@@ -16,7 +16,9 @@ const Hotel = db.define('hotel', {
 	amenities: {
 		type: Sequelize.STRING
 	}
-}, {})
+}, {defaultScope: {
+	include: [Place]
+}})
 
 
 module.exports = Hotel

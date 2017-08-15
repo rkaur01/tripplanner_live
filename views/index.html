@@ -86,56 +86,54 @@
 
 	//fill options
 	hotels.forEach((hotel) => {
-		$(`<option value=${hotel.name}> ${hotel.name} </option>`).appendTo('#hotel-choices');
+		$(`<option value=${hotel.name} data-place=${hotel.place.location}> ${hotel.name} </option>`).appendTo('#hotel-choices');
 	})
 	restaurants.forEach((restaurant) => {
-		$(`<option value=${restaurant.name}> ${restaurant.name} </option>`).appendTo('#restaurant-choices');
+		$(`<option value=${restaurant.name} data-place=${restaurant.place.location}> ${restaurant.name} </option>`).appendTo('#restaurant-choices');
 	})
 	activities.forEach((activity) => {
-		$(`<option value=${activity.name}> ${activity.name} </option>`).appendTo('#activity-choices');
+		$(`<option value=${activity.name} data-place=${activity.place.location}> ${activity.name} </option>`).appendTo('#activity-choices');
 	})
 
 	// attach listeners to add buttons
 	$('#hotel-add').on('click', 'button', function () {
-		let hotelName = $(this).parent().find(':selected').html();
-		$(`<div class="itinerary-item">
-			<span class="title">${hotelName}</span>
-			<button class="btn btn-xs btn-danger remove btn-circle">x</button>
-			</div>`)
-			.appendTo('#hotel-list');
+		let nod = $(this).parent().find(':selected');
+		addToItinMap(nod, '#hotel-list');
 	})
 
 	$('#restaurant-add').on('click', 'button', function () {
-		let hotelName = $(this).parent().find(':selected').html();
-		$(`<div class="itinerary-item">
-			<span class="title">${hotelName}</span>
-			<button class="btn btn-xs btn-danger remove btn-circle">x</button>
-			</div>`)
-			.appendTo('#restaurant-list');
+		let nod = $(this).parent().find(':selected');
+		addToItinMap(nod, '#restaurant-list');
 	})
 
 	$('#activity-add').on('click', 'button', function () {
-		let hotelName = $(this).parent().find(':selected').html();
-		$(`<div class="itinerary-item">
-			<span class="title">${hotelName}</span>
-			<button class="btn btn-xs btn-danger remove btn-circle">x</button>
-			</div>`)
-			.appendTo('#activity-list');
+		let nod = $(this).parent().find(':selected');
+		addToItinMap(nod, '#activity-list');
 	})
 
-	// let addButtons = function (addType) {
-	// 	$(addType).on('click', 'button', function () {
-	// 	let hotelName = $(this).parent().find(':selected').html();
-	// 	$(`<div class="itinerary-item">
-	// 		<span class="title">${hotelName}</span>
-	// 		<button class="btn btn-xs btn-danger remove btn-circle">x</button>
-	// 		</div>`)
-	// 		.appendTo('#hotel-list');
-	// })	
-	// addButtons('#hotel-add');
-	// addButtons('#restaurant-add');
-	// addButtons('#activity-add');
-// }
+
+	function addToItinMap(nod, listId) {
+		//let nod = $(button).parent().find(':selected')
+		$(`<div class="itinerary-item">
+			<span class="title">${nod.html()}</span>
+			<button class="btn btn-xs btn-danger remove btn-circle">x</button>
+			</div>`)
+			.appendTo(listId);
+
+		var loc = nod.get(0).dataset.place.split(',');
+		//initialize latlong object
+		var myLatlng = new google.maps.LatLng(loc[0], loc[1])
+		console.log(loc);
+
+		// Add the marker to the map
+		var marker = new google.maps.Marker({
+			position: myLatlng,
+			title: nod.html(),
+			visible: true
+		});
+		// Add the marker to the map by calling setMap()
+		marker.setMap(map);
+	}
 
 </script>
 
