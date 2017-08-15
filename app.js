@@ -17,10 +17,10 @@ const app = express()
 app.use(morgan('dev'))
 // bodyParser
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.urlencoded({ extended: true }))
 
 // set up template engine
-nunjucks.configure('views', {noCache: true})
+nunjucks.configure('views', { noCache: true })
 app.set('view engine', 'html')
 app.engine('html', nunjucks.render)
 
@@ -39,19 +39,19 @@ app.use(routes)
 // and found that none of them responded. 
 // All you need to do is add a middleware function at the very bottom of the stack 
 // (below all other functions) to handle a 404 response:
-app.use(function(req, res, next){
+app.use(function (req, res, next) {
 	const err = new Error('no findy')
 	next(err)
 })
 
-app.use(function(err, req, res, next){
-	res.render('error', {error: err})
+app.use(function (err, req, res, next) {
+	res.render('error', { error: err })
 })
 
 // do app.listen (inside a db.sync)
 db.sync()
-	.then(function(){
-		app.listen(3000, function(){
+	.then(function () {
+		app.listen(3000, function () {
 			console.log('keeping it 3000')
 		})
 	})
