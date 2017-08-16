@@ -1,4 +1,9 @@
 var map;
+var currentDayIdx = 0;
+
+//array of day objects
+//day objects will have key attractionType and value is an array of attractions added to itinerary
+var days = [{hotel:[],restaurant:[],activity:[]}];
 
 function initialize_gmaps() {
     // initialize new google maps LatLng object
@@ -59,6 +64,12 @@ $(document).ready(function() {
 			</div>`)
 			.appendTo(listId);
 
+		//at currentdayidx we want to find appropriate key, based on listId.split('-')[0]
+		//push nod.html() to that key's array
+		const attractionArr = days[currentDayIdx][listId.split('-')[0].slice(1)];
+		
+		attractionArr.push(nod.html());
+
 		var loc = nod.get(0).dataset.place.split(',');
 		//initialize latlong object
 		var myLatlng = new google.maps.LatLng(loc[0], loc[1])
@@ -75,8 +86,19 @@ $(document).ready(function() {
 		$('.itinerary-item > .remove').on('click', function () {
 			$(this).parent().remove();
 			marker.setMap(null);
+			//find index of item in appropriate array
+			//find the index where nod.html is and splice from that index
+			var remIdx = attractionArr.indexOf(nod.html());
+			attractionArr.splice(remIdx,1);
 		})
 	}
+
+	//add new day, which will also come with a button to switch to that day
+	$('#day-add').on('click', function(){
+		var newDay = $('.day-buttons button').length;
+		$(`<button class="btn btn-circle day-btn">${newDay}</button>`).insertBefore(this);
+	})
+
 
 });
 
